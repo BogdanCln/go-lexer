@@ -1,3 +1,10 @@
+/**
+ * golang lexical tokenizer
+ * Student: Calina Bogdan-Ionut
+ * Grupa: 342
+ * Referinta: https://golang.org/ref/spec - martie 2020
+ */
+
 require('dotenv').config({ path: 'parse.env' });
 const fs = require("fs");
 
