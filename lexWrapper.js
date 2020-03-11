@@ -22,12 +22,13 @@ const lexer = new Lexer(function (char) {
 	throw (new Error(errm));
 });
 
-function parseSelection (selection, token) {
+function parseSelection(selection, token) {
 	const stats = {
 		type: token,
-		// selection: selection,
+		selection: selection,
 		length: selection.length,
 		line: row,
+		column: col,
 		pointer: pointer
 	};
 
@@ -38,7 +39,7 @@ function parseSelection (selection, token) {
 	row += NLNO;
 
 	// Set the column counter as the number of characters from the last newline
-	if (NLNO === 0) { col += selection.length; } else { col += selection.length - selection.lastIndexOf("\n"); }
+	if (NLNO === 0) { col += selection.length; } else { col = selection.length - selection.lastIndexOf("\n"); }
 
 	return stats;
 }
@@ -54,10 +55,10 @@ function parseSelection (selection, token) {
 */
 
 // Single line comment rule
-lexer.addRule(/\/\/.*/, s => parseSelection.call(this, s, "Single line comment"));
+lexer.addRule(/\/\/.*/, s => parseSelection.call(this, s, "comment"));
 
 // Multi line comment rule
-lexer.addRule(/\/\*(.|\s)*?\*\//, s => parseSelection.call(this, s, "Multi line comment"));
+lexer.addRule(/\/\*(.|\s)*?\*\//, s => parseSelection.call(this, s, "comment"));
 
 /**
  * https://golang.org/ref/spec#Tokens
@@ -71,10 +72,10 @@ lexer.addRule(/\/\*(.|\s)*?\*\//, s => parseSelection.call(this, s, "Multi line 
 */
 
 const TOKENS = [
-	"identifiers",
 	"keywords",
+	"identifiers",
 	"operators_and_punctuation",
-	"literals"
+	// "literals"
 ];
 
 for (const token of TOKENS) {
@@ -82,6 +83,11 @@ for (const token of TOKENS) {
 	for (const pattern of PATTERNS) {
 		lexer.addRule(pattern, s => parseSelection.call(this, s, token));
 	}
+}
+
+const literals = require("./tokens/literals");
+for (const literal in literals) {
+	lexer.addRule(literals[literal], s => parseSelection.call(this, s, literal));
 }
 
 /**

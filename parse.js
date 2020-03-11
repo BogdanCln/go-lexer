@@ -49,6 +49,10 @@ function recursiveLex () {
 				for (const result of results) {
 					console.table(result);
 				}
+			} else {
+				for (const result of results) {
+					console.log(`${result.line}x${result.column}: ${result.type} - '${result.selection}'`);
+				}
 			}
 		}
 	} catch (error) {

@@ -43,7 +43,7 @@ Node.js with lex node module.
 - [x] Keywords
 - [x] Operators and punctuation
 - [x] Integer literals
-- [ ] Floating-point literals
+- [x] Floating-point literals
 - [ ] Imaginary literals
 - [ ] Rune literals
 - [ ] String literals
